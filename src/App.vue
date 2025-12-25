@@ -1,15 +1,18 @@
 <template>
-  <h1>Follow the <i>Sunset</i></h1>
-  <div class="part">
-    <select v-model="selectedLoc">
-      <option v-for="loc in useSelectLocation().locationAvailable" :key="loc.name" :value="loc">{{ loc.name }}</option>
-  </select>
-  </div>
-  <div v-if="loaded">
-    <SunInformations />
-  </div>
-  <div class="part" v-if="loaded">
-    <Line :data="data" :options="options" />
+  <div class="app">
+    <h1>Follow the <i>Sunset</i></h1>
+    <div class="part">
+      <select v-model="selectedLoc">
+        <option v-for="loc in useSelectLocation().locationAvailable" :key="loc.name" :value="loc">{{ loc.name }}
+        </option>
+      </select>
+    </div>
+    <div v-if="loaded">
+      <SunInformations />
+    </div>
+    <div class="chart" v-if="loaded">
+      <Line :data="data" :options="options" />
+    </div>
   </div>
 </template>
 
@@ -74,7 +77,7 @@ const options: ChartOptions<'line'> = {
       min: -90,
       max: 90,
       grid: {
-        color: (ctx) => { return ctx.tick.value === 0 ? '#ffffff' : '#e0e0e0'; }
+        color: (ctx) => { return ctx.tick.value === 0 ? '#ff0000' : '#d3d3d3'; }
       },
       ticks: {
         callback: (ctx) => { return typeof ctx === 'number' && ctx === 0 ? 'Horizon' : ''; }
@@ -86,8 +89,21 @@ const options: ChartOptions<'line'> = {
 </script>
 
 <style scoped>
+.app {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
 .part {
   width: 50%;
   align-content: center;
+}
+
+.chart {
+  height: 300px;
+  width: 80%;
 }
 </style>
