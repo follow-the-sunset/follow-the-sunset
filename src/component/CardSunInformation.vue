@@ -1,7 +1,8 @@
 <template>
     <div class="card-information">
         <div class="title">
-            <span>{{ stageLabel }}</span>
+            <span>{{ stageLabel }}</span><br>
+            <slot></slot>
         </div>
         <div class="content">
             <span>{{ stageHour }}</span>
@@ -38,8 +39,8 @@ const stageHour = computed(() => {
     padding: 16px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    width: 96px;
-    height: 96px;
+    width: 80px;
+    height: 80px;
 }
 
 .title {
