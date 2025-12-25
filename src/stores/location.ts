@@ -11,5 +11,7 @@ export const useLocationStore = defineStore('location', () => {
 
   const getLocation = () => { return location.value }
 
-  return { getLocation, setLocation }
+  const isLoaded = () => { return location.value !== null }
+
+  return { getLocation, setLocation, isLoaded, location }
 });
