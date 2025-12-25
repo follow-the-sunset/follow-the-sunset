@@ -1,4 +1,4 @@
-import type { GpsLocation } from "@/model/gpsLocation"
+import type { GpsLocation } from "@/types/gpsLocation"
 import { defineStore } from "pinia"
 import { ref } from "vue"
 

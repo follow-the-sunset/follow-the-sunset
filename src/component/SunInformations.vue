@@ -1,5 +1,7 @@
 <template>
-    <div class="sun-informations">
+    <CardSunInformation 
+        :value="sunData" />
+    <!-- <div class="sun-informations">
         <h1>Sun Informations</h1>
         <table>
             <thead>
@@ -15,23 +17,26 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div> -->
 </template>
 
 <script setup lang="ts">
-import { sunPositionService } from '@/services/sunPositionService';
+import { sunPositionService } from '@/services/sunPositionService.ts';
 import { useLocationStore } from '@/stores/location';
 import dayjs from 'dayjs';
 import { computed } from 'vue';
+import CardSunInformation from '@/component/CardSunInformation.vue';
 
 const locationStore = useLocationStore();
 
 const sunData = computed(() => {
-    return sunPositionService()
+    const value =  sunPositionService()
         .getSunPositionInformation(
             locationStore.getLocation()!.latitude, 
             locationStore.getLocation()!.longitude, 
             dayjs().toDate());
+    console.log(value);
+    return value;
 });
 
 </script>

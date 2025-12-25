@@ -17,10 +17,11 @@
 
 import dayjs from 'dayjs';
 import { CategoryScale, Chart, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
+import type { ChartOptions } from 'chart.js';
 import { Line } from 'vue-chartjs';
 import { computed, ref, type Ref } from 'vue';
 import { useSelectLocation } from './composable/selectLocation';
-import type { GpsLocation } from './model/gpsLocation';
+import type { GpsLocation } from './types/gpsLocation';
 import { useLocationStore } from './stores/location';
 import { sunPositionService } from './services/sunPositionService';
 import SunInformations from './component/SunInformations.vue';
@@ -58,7 +59,7 @@ const data = computed(() => ({
   ]
 }));
 
-const options = {
+const options: ChartOptions<'line'> = {
   responsive: true,
   maintainAspectRatio: false,
   scales: {
@@ -73,10 +74,10 @@ const options = {
       min: -90,
       max: 90,
       grid: {
-        color: (ctx: { tick: { value: number; }; }) => { return ctx.tick.value === 0 ? 2 : 0; }
+        color: (ctx) => { return ctx.tick.value === 0 ? '#ffffff' : '#e0e0e0'; }
       },
       ticks: {
-        callback: (ctx: number) => { return ctx === 0 ? 'Horizon' : ''; }
+        callback: (ctx) => { return typeof ctx === 'number' && ctx === 0 ? 'Horizon' : ''; }
       }
     }
   }

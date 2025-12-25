@@ -1,3 +1,4 @@
+import type { LocatedSunInformation } from '@/types/locatedSunInformation';
 import dayjs from 'dayjs';
 import SunCalc from 'suncalc3';
 
@@ -17,7 +18,7 @@ export const sunPositionService = () => {
         });
     }
 
-    const getSunPositionInformation = (latitude: number, longitude: number, date: Date) => {
+    const getSunPositionInformation = (latitude: number, longitude: number, date: Date): LocatedSunInformation => {
         return SunCalc.getSunTimes(date, latitude, longitude);
     }
 
