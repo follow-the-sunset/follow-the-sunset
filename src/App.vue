@@ -15,16 +15,16 @@
 
 <script setup lang="ts">
 
-import dayjs from 'dayjs';
-import { CategoryScale, Chart, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
 import type { ChartOptions } from 'chart.js';
-import { Line } from 'vue-chartjs';
-import { computed, ref, type Ref } from 'vue';
-import { useLocationStore } from './stores/location';
-import { sunPositionService } from './services/sunPositionService';
-import SunInformations from './component/SunInformations.vue';
-import LocationSelection from './component/LocationSelection.vue';
+import { CategoryScale, Chart, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
+import dayjs from 'dayjs';
 import { storeToRefs } from 'pinia';
+import { computed } from 'vue';
+import { Line } from 'vue-chartjs';
+import LocationSelection from './component/LocationSelection.vue';
+import SunInformations from './component/SunInformations.vue';
+import { sunPositionService } from './services/sunPositionService';
+import { useLocationStore } from './stores/location';
 
 
 const loaded = computed(() => {
@@ -50,7 +50,7 @@ const data = computed(() => ({
   labels: sunData.value.map(d => dayjs(d.time).format('HH:mm')),
   datasets: [
     {
-      label: 'Sun Horizon Angle',
+      label: 'Angle du soleil par rapport à l\'horizon (°)',
       backgroundColor: '#f87979',
       data: sunData.value.map(d => d.sunPosition.altitudeDegrees)
     }
@@ -75,7 +75,7 @@ const options: ChartOptions<'line'> = {
         color: (ctx) => { return ctx.tick.value === 0 ? '#ff0000' : '#d3d3d3'; }
       },
       ticks: {
-        callback: (ctx) => { return typeof ctx === 'number' && ctx === 0 ? 'Horizon' : ''; }
+        callback: (ctx) => { return typeof ctx === 'number' && ctx === 0 ? 'H' : ''; }
       }
     }
   }
@@ -93,7 +93,7 @@ const options: ChartOptions<'line'> = {
 }
 
 .part {
-  width: 50%;
+  width: 80%;
   align-content: center;
 }
 

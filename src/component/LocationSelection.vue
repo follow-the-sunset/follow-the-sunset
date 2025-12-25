@@ -8,8 +8,8 @@
             <button @click="updateLocation" class="btn"><FontAwesomeIcon :icon="faLocationDot" /></button>
         </div>
         <div v-if="selectedLoc" class="location-inputs">
-            <input type="text" v-model="selectedLoc.latitude" placeholder="Latitude" />
-            <input type="text" v-model="selectedLoc.longitude" placeholder="Longitude" />
+            <input type="text" v-model="selectedLoc.latitude" placeholder="Latitude" class="location-input" />
+            <input type="text" v-model="selectedLoc.longitude" placeholder="Longitude" class="location-input" />
         </div>
     </div>
 </template>
@@ -46,15 +46,21 @@ const updateLocation = () => {
 <style scoped>
 .location-selection {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    gap: 16px;
 }
 
 .location-inputs {
     display: flex;
+    justify-content: center;
     gap: 8px;
+    width: 100%;
+}
+.location-input {
+    padding: 4px;
+    text-align: center;
 }
 
 .btn {
