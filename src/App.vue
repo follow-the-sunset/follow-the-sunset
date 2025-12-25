@@ -2,10 +2,7 @@
   <div class="app">
     <h1>Follow the <i>Sunset</i></h1>
     <div class="part">
-      <select v-model="selectedLoc">
-        <option v-for="loc in useSelectLocation().locationAvailable" :key="loc.name" :value="loc">{{ loc.name }}
-        </option>
-      </select>
+      <LocationSelection />
     </div>
     <div v-if="loaded">
       <SunInformations />
@@ -23,18 +20,15 @@ import { CategoryScale, Chart, Legend, LinearScale, LineElement, PointElement, T
 import type { ChartOptions } from 'chart.js';
 import { Line } from 'vue-chartjs';
 import { computed, ref, type Ref } from 'vue';
-import { useSelectLocation } from './composable/selectLocation';
-import type { GpsLocation } from './types/gpsLocation';
 import { useLocationStore } from './stores/location';
 import { sunPositionService } from './services/sunPositionService';
 import SunInformations from './component/SunInformations.vue';
+import LocationSelection from './component/LocationSelection.vue';
+import { storeToRefs } from 'pinia';
 
-const selectedLoc: Ref<GpsLocation | null> = ref(null);
+
 const loaded = computed(() => {
-  if (selectedLoc.value !== null) {
-    useLocationStore().setLocation({ latitude: selectedLoc.value.latitude, longitude: selectedLoc.value.longitude });
-  }
-  return selectedLoc.value !== null;
+  return useLocationStore().isLoaded();
 });
 
 Chart.register(
@@ -48,7 +42,8 @@ Chart.register(
 )
 
 const sunData = computed(() => {
-  return sunPositionService().getDailySunPositions(selectedLoc.value!.latitude, selectedLoc.value!.longitude, dayjs().toDate());
+  const location = storeToRefs(useLocationStore()).location;
+  return sunPositionService().getDailySunPositions(location.value!.latitude, location.value!.longitude, dayjs().toDate());
 });
 
 const data = computed(() => ({
