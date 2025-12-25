@@ -1,14 +1,34 @@
 <template>
     <div class="sun-informations">
-        <CardSunInformation :value="sunData.astronomicalDawn" />
-        <CardSunInformation :value="sunData.nauticalDawn" />
-        <CardSunInformation :value="sunData.civilDawn" />
-        <CardSunInformation :value="sunData.sunriseStart" />
-        <CardSunInformation :value="sunData.solarNoon" />
-        <CardSunInformation :value="sunData.sunsetStart" />
-        <CardSunInformation :value="sunData.civilDusk" />
-        <CardSunInformation :value="sunData.nauticalDusk" />
-        <CardSunInformation :value="sunData.astronomicalDusk" />
+        <CardSunInformation :value="sunData.astronomicalDawn">
+            <FontAwesomeIcon :icon="faStar" />
+        </CardSunInformation>
+        <CardSunInformation :value="sunData.nauticalDawn">
+            <FontAwesomeIcon :icon="faAnchor" />
+        </CardSunInformation>
+        <CardSunInformation :value="sunData.civilDawn">
+            <FontAwesomeIcon :icon="faBuilding" />
+        </CardSunInformation>
+        <CardSunInformation :value="sunData.sunriseStart">
+            <FontAwesomeIcon :icon="faSun" />
+            <FontAwesomeIcon :icon="faUpLong" />
+        </CardSunInformation>
+        <CardSunInformation :value="sunData.solarNoon">
+            <FontAwesomeIcon :icon="faSun" />
+        </CardSunInformation>
+        <CardSunInformation :value="sunData.sunsetStart">
+            <FontAwesomeIcon :icon="faSun" />
+            <FontAwesomeIcon :icon="faDownLong" />
+        </CardSunInformation>
+        <CardSunInformation :value="sunData.civilDusk">
+            <FontAwesomeIcon :icon="faBuilding" />
+        </CardSunInformation>
+        <CardSunInformation :value="sunData.nauticalDusk">
+            <FontAwesomeIcon :icon="faAnchor" />
+        </CardSunInformation>
+        <CardSunInformation :value="sunData.astronomicalDusk">
+            <FontAwesomeIcon :icon="faStar" />
+        </CardSunInformation>
     </div>
 </template>
 
@@ -17,6 +37,8 @@ import CardSunInformation from '@/component/CardSunInformation.vue';
 import { sunPositionService } from '@/services/sunPositionService.ts';
 import { useLocationStore } from '@/stores/location';
 import type { LocatedSunInformation } from '@/types/locatedSunInformation';
+import { faAnchor, faBuilding, faDownLong, faStar, faSun, faUpLong } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import dayjs from 'dayjs';
 import { computed } from 'vue';
 
