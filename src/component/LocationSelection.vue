@@ -1,11 +1,20 @@
 <template>
     <div class="location-selection">
-        <div class="location-inputs">
-            <select v-model="selectedLoc">
-                <option v-for="loc in useSelectLocation().locationAvailable" :key="loc.name" :value="loc">{{ loc.name }}
-                </option>
-            </select>
-            <button @click="updateLocation" class="btn"><FontAwesomeIcon :icon="faLocationDot" /></button>
+        <div class="location-search">
+            <div class="autocomplete-search-box">
+                <input type="input" name="search" placeholder="Search" aria-label="Search" v-model="locationName" class="search-box" />
+                <ul v-if="search.length > 0" class="search-result">
+                    <li v-for="loc in search" :key="loc.city"
+                        @click="selectedLoc = { latitude: loc.lat, longitude: loc.lng }; locationName = ''">
+                        {{ loc.city }}, {{ loc.country }}
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <button @click="updateLocation" class="btn">
+                    <FontAwesomeIcon :icon="faLocationDot" />
+                </button>
+            </div>
         </div>
         <div v-if="selectedLoc" class="location-inputs">
             <input type="text" v-model="selectedLoc.latitude" placeholder="Latitude" class="location-input" />
@@ -21,6 +30,7 @@ import { useSelectLocation } from '@/composable/selectLocation';
 import { useLocationStore } from '@/stores/location';
 import { storeToRefs } from 'pinia';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { computed, ref } from 'vue';
 
 const selectedLoc = storeToRefs(useLocationStore()).location;
 
@@ -41,6 +51,17 @@ const updateLocation = () => {
     }
 }
 
+const locationName = ref('');
+
+const search = computed(() => {
+    if (locationName.value !== '') {
+        return useSelectLocation().locationAvailable.filter(loc =>
+            loc.city.toLowerCase().includes(locationName.value.toLowerCase())).slice(0, 5);
+    } else {
+        return [];
+    }
+});
+
 </script>
 
 <style scoped>
@@ -56,14 +77,59 @@ const updateLocation = () => {
     display: flex;
     justify-content: center;
     gap: 8px;
+    padding: 8px;
     width: 100%;
 }
-.location-input {
-    padding: 4px;
+
+.location-search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 8px;
+    padding: 8px;
+    gap: 8px;
     text-align: center;
+    width: 100%;
 }
 
 .btn {
-    height: 100%;
+    height: 64px;
+    background: #3498db;
+    border: none;
+}
+
+.autocomplete-search-box {
+    width: 100%;
+    box-shadow: 0 2px 10px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    overflow: hidden;;
+}
+
+.autocomplete-search-box .search-box {
+    width: 100%;
+    height: 40px;
+    padding: 30px 20px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 20px;
+    text-align: center
+}
+
+.autocomplete-search-box .search-result {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.autocomplete-search-box .search-result li {
+    width: 100%;
+    list-style-type: none;
+    padding: 10px 20px;
+}
+
+.autocomplete-search-box .search-result li:hover {
+    background: #3498db;
+    color: white;
 }
 </style>
