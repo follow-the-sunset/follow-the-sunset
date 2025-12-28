@@ -19,13 +19,35 @@ import type { ChartOptions } from 'chart.js';
 import { CategoryScale, Chart, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from 'chart.js';
 import dayjs from 'dayjs';
 import { storeToRefs } from 'pinia';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Line } from 'vue-chartjs';
 import LocationSelection from './component/LocationSelection.vue';
 import SunInformations from './component/SunInformations.vue';
 import { sunPositionService } from './services/sunPositionService';
+import { useLocationSourceStore } from './stores/localisationSource';
 import { useLocationStore } from './stores/location';
+import type { City } from './types/city';
 
+const state = ref<'loading' | 'idle' | 'error'>('loading');
+
+onMounted(() => {
+  fetch('/follow-the-sunset/cities.json')
+    .then(response => {
+      if (response.ok) {
+        return response.json()
+      }
+      throw new Error('Echec du chargement du json')
+    })
+    .then(data => {
+      storeToRefs(useLocationSourceStore()).source.value = data as City[];
+      state.value = 'idle'
+    })
+    .catch(e => {
+      console.error(e)
+      state.value = 'error'
+    })
+
+});
 
 const loaded = computed(() => {
   return useLocationStore().isLoaded();
