@@ -5,7 +5,7 @@
                 <input type="input" name="search" placeholder="Search" aria-label="Search" v-model="locationName" class="search-box" />
                 <ul v-if="search.length > 0" class="search-result">
                     <li v-for="loc in search" :key="loc.city"
-                        @click="selectedLoc = { latitude: loc.lat, longitude: loc.lng }; locationName = ''">
+                        @click="selectedLoc = { latitude: loc.lat, longitude: loc.lng }; selectedLocationName = `${loc.city}, ${loc.country}`; locationName = ''">
                         {{ loc.city }}, {{ loc.country }}
                     </li>
                 </ul>
@@ -17,6 +17,7 @@
             </div>
         </div>
         <div v-if="selectedLoc" class="location-inputs">
+            <span>{{ selectedLocationName }}</span>
             <input type="text" v-model="selectedLoc.latitude" placeholder="Latitude" class="location-input" />
             <input type="text" v-model="selectedLoc.longitude" placeholder="Longitude" class="location-input" />
         </div>
@@ -33,12 +34,14 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { computed, ref } from 'vue';
 
 const selectedLoc = storeToRefs(useLocationStore()).location;
+const selectedLocationName = ref('');
 
 const updateLocation = () => {
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
 
             (position) => {
+                selectedLocationName.value = 'Current Location';
                 selectedLoc.value = {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude

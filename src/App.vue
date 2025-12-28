@@ -4,6 +4,9 @@
     <div class="part">
       <LocationSelection />
     </div>
+    <div>
+      <DateSelection />
+    </div>
     <div v-if="loaded">
       <SunInformations />
     </div>
@@ -27,6 +30,8 @@ import { sunPositionService } from './services/sunPositionService';
 import { useLocationSourceStore } from './stores/localisationSource';
 import { useLocationStore } from './stores/location';
 import type { City } from './types/city';
+import DateSelection from './component/DateSelection.vue';
+import { useDateStore } from './stores/date';
 
 const state = ref<'loading' | 'idle' | 'error'>('loading');
 
@@ -65,7 +70,9 @@ Chart.register(
 
 const sunData = computed(() => {
   const location = storeToRefs(useLocationStore()).location;
-  return sunPositionService().getDailySunPositions(location.value!.latitude, location.value!.longitude, dayjs().toDate());
+  const date = storeToRefs(useDateStore()).selectedDate;
+  console.log('Calculating sun positions for', location.value, 'on date', date.value);
+  return sunPositionService().getDailySunPositions(location.value!.latitude, location.value!.longitude, date.value);
 });
 
 const data = computed(() => ({

@@ -1,6 +1,8 @@
+import { useDateStore } from '@/stores/date';
 import type { LocatedSunInformation } from '@/types/locatedSunInformation';
 import { SunStageEnum } from '@/types/sunStageEnum';
 import dayjs from 'dayjs';
+import { storeToRefs } from 'pinia';
 import * as SunCalc from 'suncalc-ts';
 
 export const sunPositionService = () => {
@@ -9,8 +11,9 @@ export const sunPositionService = () => {
     }
 
     const getDailySunPositions = (latitude: number, longitude: number, date: Date) => {
+        const selectedDate = storeToRefs(useDateStore()).selectedDate;
         return Array.from({ length: 48 }, (_, i) => {
-            const time = dayjs().startOf('day').add(i * 30, 'minute').toDate();
+            const time = dayjs(selectedDate.value).startOf('day').add(i * 30, 'minute').toDate();
             const pos = getSunPosition(latitude, longitude, time);
             return {
                 time: time,
